@@ -1,8 +1,10 @@
 
-# Django Boiler Plate
+# Made by Django Boiler Plate by John Mandy
+# A Heart Disease Forecasting System with Medical Prescription
 
 Inclusions:
 
+## Using Random Forest Tree Regression
 
 ## Features
 
