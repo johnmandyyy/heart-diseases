@@ -1,0 +1,127 @@
+
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="modal" id="sample-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- Content ... -->
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success">Save changes</button>
+            <button class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
+
+<p
+    class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i
+        class="fa-solid fa-folders"></i> Datasets</p>
+<p class="has-text-grey">Here you can add datasets, or view.</p>
+
+<div class="card is-rounded has-background-white mb-4">
+    <div class="card-content">
+        <div class="columns">
+            <div class="column is-8">
+                <p
+                    class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                    Diagnosis Dataset(s)
+                </p>
+                <p
+                    class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                    Here you can add, diagnosis to each regression.
+                </p>
+            </div>
+            <div class="column is-2 mb-0 pb-0">
+                <button class="button is-primary is-fullwidth">
+                    Add Dataset(s)
+                </button>
+            </div>
+            <div class="column is-2 mb-0 pb-0">
+                <button class="button is-secondary is-fullwidth">
+                    Add Dataset(s)
+                </button>
+            </div>
+        </div>
+        <table class="table has-background-white" id="sample-table">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Data # 1</td>
+                    <td>Data # 2</td>
+                </tr>
+                <tr>
+                    <td>Data # 3</td>
+                    <td>Data # 4</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="card is-rounded has-background-white mb-4">
+    <div class="card-content">
+        <div class="columns">
+            <div class="column is-8">
+                <p
+                    class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                    Medicine Dataset(s)
+                </p>
+                <p
+                    class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                    Here you can add medicine dataset(s) and it's usage.
+                </p>
+            </div>
+            <div class="column is-4">
+
+                <button class="button is-primary     is-fullwidth">
+                    Login
+                </button>
+
+            </div>
+        </div>
+        <table class="table has-background-white" id="sample-table">
+            <thead>
+                <tr>
+                    <th>Column 1</th>
+                    <th>Column 2</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Data # 1</td>
+                    <td>Data # 2</td>
+                </tr>
+                <tr>
+                    <td>Data # 3</td>
+                    <td>Data # 4</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        try {
+            var t = new DataTable('#sample-table');
+        } catch (error) {
+            // Handle the error here
+            setTimeout(function () { var t = new DataTable('#sample-table'); }, 3000)
+        }
+    });
+</script>
+{% endblock %}

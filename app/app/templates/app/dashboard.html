@@ -1,0 +1,160 @@
+
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div class="modal" id="sample-modal">
+    <div class="modal-background"></div>
+    <div class="modal-card">
+        <header class="modal-card-head">
+            <p class="modal-card-title">Modal title</p>
+            <button class="delete" aria-label="close"></button>
+        </header>
+        <section class="modal-card-body">
+            <!-- Content ... -->
+        </section>
+        <footer class="modal-card-foot">
+            <button class="button is-success">Save changes</button>
+            <button class="button">Cancel</button>
+        </footer>
+    </div>
+</div>
+<p
+    class="is-size-3 has-text-weight-semibold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i
+        class="fa-solid fa-house"></i> Welcome, {{ request.user }}!</p>
+<p class="has-text-grey">Here is your Dashboard, showing model metrics, and
+    etc.</p>
+
+<h1 class="is-size-6 has-text-grey-darke is-uppercase pb-2">Model Metrics:</h1>
+<div class="columns">
+
+    <div class="column is-6">
+        <div class="columns">
+            <div class="column is-6">
+                <div class="card border-rounder has-text-info">
+                    <div class="card-content">
+                        <p
+                            class="title is-size-5 has-text-centered mb-1 pb-0 has-text-weight-bold has-text-info">
+                            <i class="fa-solid fa-bullseye-arrow"></i> Accuracy
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-weight-normal">Based
+                            on Validation / Testing</p>
+                        <div class="content">
+                            <p
+                                class="is-size-3 has-text-centered has-text-weight-semibold">98%</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card border-rounder has-text-danger">
+                    <div class="card-content">
+                        <p
+                            class="title is-size-5 has-text-centered mb-1 pb-0 has-text-weight-bold has-text-danger">
+                            <i class="fa-solid fa-ruler"></i> Precision
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-weight-normal">Based
+                            on Validation / Testing</p>
+                        <div class="content">
+                            <p
+                                class="is-size-3 has-text-centered has-text-weight-normal">98%</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="column is-6">
+        <div class="columns">
+            <div class="column is-6">
+                <div class="card border-rounder">
+                    <div class="card-content">
+                        <p
+                            class="title is-size-5 has-text-centered has-text-primary mb-1 pb-0 has-text-weight-bold">
+                            <i class="fa-solid fa-bookmark"></i> Recall
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-primary has-text-weight-normal">Based
+                            on Validation / Testing
+                        </p>
+                        <div class="content">
+                            <p
+                                class="has-text-primary is-size-3 has-text-centered has-text-weight-normal">502</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card border-rounder">
+                    <div class="card-content has-background-white-darker">
+                        <p
+                            class="title is-size-5 has-text-centered has-text-grey-dark mb-1 pb-0 has-text-weight-bold">
+                            <i class="fa-solid fa-star"></i> F1 Score
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-grey has-text-weight-normal">Based
+                            on Validation / Testing
+                        </p>
+                        <div class="content">
+                            <p
+                                class="has-text-grey-dark is-size-3 has-text-centered has-text-weight-normal">98</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<h1 class="is-size-6 has-text-grey-darke is-uppercase pb-2">Patients:</h1>
+<div class="columns">
+
+    <div class="column is-12">
+        <div class="columns">
+            <div class="column is-6">
+                <div class="card border-rounder has-text-grey">
+                    <div class="card-content">
+                        <p
+                            class="title is-size-5 has-text-centered mb-1 pb-0 has-text-weight-bold has-text-grey">
+                            <i class="fa-solid fa-users-medical"></i> Total Patients
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-weight-normal">Total Patient(s)</p>
+                        <div class="content">
+                            <p
+                                class="is-size-3 has-text-centered has-text-weight-semibold">107</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="column is-6">
+                <div class="card border-rounder has-text-link">
+                    <div class="card-content">
+                        <p
+                            class="title is-size-5 has-text-centered mb-1 pb-0 has-text-weight-bold has-text-link">
+                            <i class="fa-solid fa-question"></i> Pending Patient(s)
+                        </p>
+                        <p
+                            class="is-size-6 has-text-centered p-0 m-0 has-text-weight-normal">Count of</p>
+                        <div class="content">
+                            <p
+                                class="is-size-3 has-text-centered has-text-weight-normal">98%</p>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,52 @@
+<aside
+    class="column is-2 is-hidden-mobile full-height backdrop has-background-light">
+    <div class="menu">
+        
+        <h1
+            class="is-size-5 has-text-weight-bold has-text-grey has-text-weight-light has-text-centered is-family-primary m-2">
+            <i class="fa-solid fa-bars mr-2 mb-3 pb-3 pt-3"></i> MENU
+        </h1>
+
+        <ul class="menu-list">
+            <li class="mb-2 mt-2 pt-1">
+                <a href="{% url 'home' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/' %} has-background-grey-lighter{% endif %}" style="border-radius: 5px;"> 
+                    <span class="icon is-small has-text-grey-darker ml-4"><i class="fa-solid fa-house mr-4"></i></span>
+                    <p class="has-text-weight-medium pb-1">Dashboard</p>
+                </a>
+            </li>
+            <li class="mb-2 mt-2 pt-1">
+                <a href="{% url 'dataset' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/dataset/' %} has-background-grey-lighter{% endif %}"> 
+                    <span class="icon is-small ml-4"><i class="fa-solid fa-database mr-4"></i></span>
+                    <p class="has-text-weight-medium pb-1">Manage Datasets</p>
+                </a>
+            </li>
+            <li class="mb-2 mt-2 pt-1">
+                <a href="#" class="is-flex is-align-items-center has-text-grey-darker">
+                    <span class="icon is-small has-text-grey ml-4"><i class="fa-solid fa-plus mr-4"></i></span>
+                    <span class="has-text-weight-medium pb-1">Add Patient(s)</span>
+                </a>
+            </li>
+            <li class="mb-2 mt-2 pt-1">
+                <a href="#" class="is-flex is-align-items-center has-text-grey-darker">
+                    <span class="icon is-small has-text-grey ml-4"><i class="fa-solid fa-heart-pulse mr-4"></i></span>
+                    <span class="has-text-weight-medium pb-1">Diagnose Patient(s)</span>
+                </a>
+            </li>
+        </ul>
+        
+
+        <ul class="menu-list is-hidden">
+            <li class="mb-2 mt-2 pt-1">
+              <a class="is-active has-background-light has-text-grey is-flex is-align-items-center ">Manage Your Team</a>
+              <ul>
+                <li>
+                    <a class="has-text-weight-medium has-text-secondary pb-1">Members</a></li>
+              </ul>
+            </li>
+            <li><a>Invitations</a></li>
+            <li><a>Cloud Storage Environment Settings</a></li>
+            <li><a>Authentication</a></li>
+          </ul>
+        
+    </div>
+</aside>
