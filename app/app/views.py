@@ -13,6 +13,9 @@ from django.shortcuts import redirect
 # Tools
 from datetime import datetime
 
+from .algorithm import TreeAlgorithm
+from .datagen import DataGenerator
+from .models import *
 class Helpers:
 
     def __init__(self):
@@ -49,6 +52,7 @@ class TemplateView:
     
     def datasets(self, request):
         """Renders the home page."""
+
         assert isinstance(request, HttpRequest)
         if self.helper.userIsLoggedIn(request) == True:
             return render(
@@ -63,6 +67,13 @@ class TemplateView:
 
     def home(self, request):
         """Renders the home page."""
+
+        #D = DataGenerator()
+        
+        Tree = TreeAlgorithm()
+        Tree.adaBoost()
+        Tree.adaBoostMedicine()
+            
         assert isinstance(request, HttpRequest)
         if self.helper.userIsLoggedIn(request) == True:
             return render(

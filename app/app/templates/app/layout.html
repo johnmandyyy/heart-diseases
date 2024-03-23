@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 
     <meta charset="utf-8" />
@@ -18,6 +19,9 @@
     <script src="{% static 'app/jquery/jquery-3.6.0.min.js' %}"></script>
     <script src="{% static 'app/user-defined/js/modal.js' %}" defer></script>
     <script src="{% static 'app/datatables/datatables.min.js' %}" async></script>
+
+    <script src="{% static 'app/scripts/vue.min.js' %}"></script>
+    <script src="{% static 'app/scripts/axios.min.js' %}"></script>
 
 
 </head>
@@ -46,12 +50,12 @@
 
 
 
-        {% block scripts %}
+    {% block scripts %}
 
-        {% endblock %}
-        
+    {% endblock %}
+
     <script src="{% static 'app/user-defined/js/navbar.js' %}" defer></script>
-    
+
 </body>
 
 </html>

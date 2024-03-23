@@ -1,127 +1,152 @@
-
 {% extends "app/layout.html" %}
 
 {% block content %}
 
-<div class="modal" id="sample-modal">
-    <div class="modal-background"></div>
-    <div class="modal-card">
-        <header class="modal-card-head">
-            <p class="modal-card-title">Modal title</p>
-            <button class="delete" aria-label="close"></button>
-        </header>
-        <section class="modal-card-body">
-            <!-- Content ... -->
-        </section>
-        <footer class="modal-card-foot">
-            <button class="button is-success">Save changes</button>
-            <button class="button">Cancel</button>
-        </footer>
-    </div>
-</div>
-
-<p
-    class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i
-        class="fa-solid fa-folders"></i> Datasets</p>
-<p class="has-text-grey">Here you can add datasets, or view.</p>
-
-<div class="card is-rounded has-background-white mb-4">
-    <div class="card-content">
-        <div class="columns">
-            <div class="column is-8">
-                <p
-                    class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
-                    Diagnosis Dataset(s)
-                </p>
-                <p
-                    class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
-                    Here you can add, diagnosis to each regression.
-                </p>
-            </div>
-            <div class="column is-2 mb-0 pb-0">
-                <button class="button is-primary is-fullwidth">
-                    Add Dataset(s)
-                </button>
-            </div>
-            <div class="column is-2 mb-0 pb-0">
-                <button class="button is-secondary is-fullwidth">
-                    Add Dataset(s)
-                </button>
-            </div>
+<div id="datasets">
+    <div class="modal" id="sample-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Modal title</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
         </div>
-        <table class="table has-background-white" id="sample-table">
-            <thead>
-                <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Data # 1</td>
-                    <td>Data # 2</td>
-                </tr>
-                <tr>
-                    <td>Data # 3</td>
-                    <td>Data # 4</td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
-</div>
 
-<div class="card is-rounded has-background-white mb-4">
-    <div class="card-content">
-        <div class="columns">
-            <div class="column is-8">
-                <p
-                    class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
-                    Medicine Dataset(s)
-                </p>
-                <p
-                    class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
-                    Here you can add medicine dataset(s) and it's usage.
-                </p>
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Datasets</p>
+    <p class="has-text-grey">Here you can add datasets, or view.</p>
+
+    <div class="card is-rounded has-background-white mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-8">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        Diagnosis Dataset(s)
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        Here you can add, diagnosis to each regression.
+                    </p>
+                </div>
+                <div class="column is-2 mb-0 pb-0">
+                    <button class="button is-primary is-fullwidth">
+                        Add Dataset(s)
+                    </button>
+                </div>
+                <div class="column is-2 mb-0 pb-0">
+                    <button class="button is-secondary is-fullwidth">
+                        Add Dataset(s)
+                    </button>
+                </div>
             </div>
-            <div class="column is-4">
-
-                <button class="button is-primary     is-fullwidth">
-                    Login
-                </button>
-
+            <div class="table-container">
+                <table class="table is-fullwidth is-striped" id="dataset-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Sex</th>
+                            <th>Age</th>
+                            <th>Chest Pain Type</th>
+                            <th>Resting Blood Pressure</th>
+                            <th>Serum Cholesterol</th>
+                            <th>Fasting Blood Sugar (FBS)</th>
+                            <th>Maximum Heart Rate Achieved (Thalach)</th>
+                            <th>Exercise Induced Angina (Exang)</th>
+                            <th>ST Depression Induced by Exercise (Oldpeak)</th>
+                            <th>Slope of the Peak Exercise ST Segment</th>
+                            <th>Number of Major Vessels Colored by Fluoroscopy (Ca)</th>
+                            <th>Thalassemia</th>
+                            <th>Target (Presence of Heart Disease)</th>
+                            <th>Healed</th>
+                            <th>Prescribed Medicine</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in datasets" :key="index">
+                            <td>[[ item.id ]]</td>
+                            <td>[[ item.sex ]]</td>
+                            <td>[[ item.age ]]</td>
+                            <td>[[ item.cp ]]</td>
+                            <td>[[ item.trestbps ]]</td>
+                            <td>[[ item.chol ]]</td>
+                            <td>[[ item.fbs ]]</td>
+                            <td>[[ item.thalach ]]</td>
+                            <td>[[ item.exang ]]</td>
+                            <td>[[ item.oldpeak ]]</td>
+                            <td>[[ item.slope ]]</td>
+                            <td>[[ item.ca ]]</td>
+                            <td>[[ item.thal ]]</td>
+                            <td>[[ item.target ]]</td>
+                            <td>[[ item.is_healed ]]</td>
+                            <td v-if="item.medicine_id">[[ item.medicine_id.medicine_name ]]</td>
+                            <td v-else>No Medicine Needed</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
+
         </div>
-        <table class="table has-background-white" id="sample-table">
-            <thead>
-                <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Data # 1</td>
-                    <td>Data # 2</td>
-                </tr>
-                <tr>
-                    <td>Data # 3</td>
-                    <td>Data # 4</td>
-                </tr>
-            </tbody>
-        </table>
-
     </div>
+
+    <div class="card is-rounded has-background-white mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-8">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        Testing Dataset(s) - Abnormal/Normal
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        This are the data used for testing and evaluated. This is the 20% of the data from the master list.
+                    </p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table is-fullwidth is-striped" id="testing_table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Expected</th>
+                            <th>Predicted</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in testing" :key="index">
+                            <td>[[ item.training_data.id ]]</td>
+                            <td>[[ item.training_data.target ]]</td>
+                            <td class="has-background-primary has-text-white has-text-weight-bold" v-if="item.predicted_values === item.training_data.target">[[ item.predicted_values ]]</td>
+                            <td class="has-background-danger has-text-white has-text-weight-bold" v-else>[[ item.predicted_values ]]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function() {
         try {
-            var t = new DataTable('#sample-table');
+            var dataset_table = new DataTable('#dataset-table');
+            var testing_table = new DataTable('#testing_table');
         } catch (error) {
             // Handle the error here
-            setTimeout(function () { var t = new DataTable('#sample-table'); }, 3000)
+            setTimeout(function() {
+                var dataset_table = new DataTable('#dataset-table');
+                var testing_table = new DataTable('#testing_table');
+            }, 3000)
         }
     });
 </script>
+
+{% load static %}
+<script src="{% static 'app/store/datasets.js' %}"></script>
+
 {% endblock %}
