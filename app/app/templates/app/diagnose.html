@@ -1,0 +1,214 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div id="patients">
+
+    <div class="modal" id="sample-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title has-text-weight-bold">Remarks</p>
+                <button class="delete" aria-label="close" @click="clearFields()"></button>
+            </header>
+            <section class="modal-card-body has-text-centered">
+                <span v-if="finalRemarks.remarks === true">
+                    <p class="has-text-danger is-size-4 has-text-weight-semibold">Patient's heart has abnormalities.</p>
+                    <p class="has-text-grey">As suggestion and verdict take [[ finalRemarks.instruction ]]</p>
+                </span>
+                <span v-else>
+                    <p class="has-text-grey">Patient's heart is normal.</p>
+                </span>
+
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button" @click="clearFields()">Close</button>
+            </footer>
+        </div>
+    </div>
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Diagnose Patient(s)</p>
+    <p class="has-text-grey">Here you can diagnose patient(s)</p>
+
+    <div class="card is-rounded has-background-white mt-4 mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-12">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        Diagnosis Form
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        Here you can select the results from the test.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                {% csrf_token %}
+
+                <div class="columns is-multiline">
+                    <div class="column is-one-third">
+                        <div class="field">
+                            <label class="label">Name of Patient(s)</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="patient_info" v-model="patientInfo" @change="autoFill()">
+                                        <option v-for="patients in list_of_patients" :value="patients.id">
+                                            [[ patients.name ]] [[ patients.last_name ]]
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Sex</label>
+                            <div class="control">
+                                <input v-model="sex" class="input" type="text" name="sex" placeholder="Sex" disabled>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Age</label>
+                            <div class="control">
+                                <input v-model="age" class="input" type="text" name="age" placeholder="Age" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column is-one-third">
+                        <div class="field">
+                            <label class="label">Chest Pain Type</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="cp" v-model="predictingData.cp">
+                                        <option value="0">Typical angina</option>
+                                        <option value="1">Atypical angina</option>
+                                        <option value="2">Non-anginal pain</option>
+                                        <option value="3">Asymptomatic</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Resting Blood Pressure (mm Hg)</label>
+                            <div class="control">
+                                <input v-model="predictingData.trestbps" class="input" type="number" name="trestbps" placeholder="Resting Blood Pressure">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Serum Cholesterol (mg/dl)</label>
+                            <div class="control">
+                                <input v-model="predictingData.chol" class="input" type="number" name="chol" placeholder="Serum Cholesterol">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="column is-one-third">
+
+                        <div class="field">
+                            <label class="label">Maximum Heart Rate Achieved</label>
+                            <div class="control">
+                                <input class="input" v-model="predictingData.thalach" type="number" name="thalach" placeholder="Maximum Heart Rate Achieved">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Slope of the Peak Exercise ST Segment</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="slope" v-model="predictingData.slope">
+                                        <option value="0">Upsloping</option>
+                                        <option value="1">Flat</option>
+                                        <option value="2">Downsloping</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Thalassemia</label>
+                            <div class="control">
+                                <div class="select is-fullwidth">
+                                    <select name="thal" v-model="predictingData.thal">
+                                        <option value="1">Normal</option>
+                                        <option value="2">Fixed defect</option>
+                                        <option value="3">Reversible defect</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="columns">
+                    <div class="column is-full">
+
+                        <div class="field">
+                            <label class="label">ST Depression Induced by Exercise Relative to Rest</label>
+                            <div class="control">
+                                <input class="input" v-model="predictingData.oldpeak" type="text" name="oldpeak" placeholder="ST Depression">
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Number of Major Vessels Colored by Flourosopy</label>
+                            <div class="control">
+                                <input class="input" v-model="predictingData.ca" type="text" name="ca" placeholder="Number of Major Vessels">
+                            </div>
+                        </div>
+
+
+                        <div class="field">
+                            <label class="label">Fasting Blood Sugar > 120 mg/dl</label>
+                            <div class="control">
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="predictingData.fbs" name="fbs">
+                                    Yes
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <label class="label">Exercise Induced Angina</label>
+                            <div class="control">
+                                <label class="checkbox">
+                                    <input type="checkbox" v-model="predictingData.exang" name="exang">
+                                    Yes
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="field is-grouped">
+                    <div class="control">
+                        <button class="button is-link is-underlined has-text-weight-bold js-modal-trigger" data-target="sample-modal" type="submit" @click="getPrediction()">Diagnose</button>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            var patients_table = new DataTable('#patients-table');
+        } catch (error) {
+            // Handle the error here
+            setTimeout(function() {
+                var patients_table = new DataTable('#patients-table');
+            }, 3000)
+        }
+    });
+</script>
+
+{% load static %}
+<script src="{% static 'app/store/patients.js' %}"></script>
+{% endblock %}

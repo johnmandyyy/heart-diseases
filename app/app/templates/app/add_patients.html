@@ -1,0 +1,155 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div id="patients">
+    <div class="modal" id="sample-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">Modal title</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                <!-- Content ... -->
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Add Patients</p>
+    <p class="has-text-grey">Here you can add patient(s)</p>
+
+    <!-- template.html -->
+
+
+
+    <div class="card is-rounded has-background-white mt-4 mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-8">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        Patient(s) Information Form
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        Here you can add a patient.
+                    </p>
+                </div>
+            </div>
+
+            <div>
+
+                {% csrf_token %}
+
+                <div class="field">
+                    <label class="label">Name</label>
+                    <div class="control">
+                        <input v-model="name" class="input" type="text" name="name" placeholder="Enter Name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Middle Name</label>
+                    <div class="control">
+                        <input v-model="middle_name" class="input" type="text" name="middle_name" placeholder="Enter Middle Name" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label class="label">Last Name</label>
+                    <div class="control">
+                        <input v-model="last_name" class="input" type="text" name="last_name" placeholder="Enter Last Name" required>
+                    </div>
+                </div>
+
+
+                <div class="control mb-2">
+                    <label class="radio">
+                        <input type="radio" value="1" name="sex" v-model="sex" />
+                        Male
+                    </label>
+                    <label class="radio">
+                        <input type="radio" value="2" name="sex" v-model="sex" />
+                        Female
+                    </label>
+                </div>
+
+                <div class="field">
+                    <label class="label">Birth Date</label>
+                    <div class="control">
+                        <input v-model="birth_date" class="input" type="date" name="birth_date" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <div class="control">
+                        <button @click="addPatients()" class="button is-primary is-fullwidth">Add Patient</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="card is-rounded has-background-white mt-4 mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-8">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        List of Patient(s)
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        This is the list of Patients.
+                    </p>
+                </div>
+            </div>
+            <div class="table-container">
+                <table class="table is-fullwidth is-striped" id="patients-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Middle Name</th>
+                            <th>Last Name</th>
+                            <th>Birth Date</th>
+                            <th>Sex</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(item, index) in list_of_patients" :key="index">
+                            <td>[[ item.name ]]</td>
+                            <td>[[ item.middle_name ]]</td>
+                            <td>[[ item.last_name ]]</td>
+                            <td>[[ item.birth_date ]]</td>
+                            <td v-if="item.sex === 1">Male</td>
+                            <td v-else-if="item.sex === 2">Female</td>
+                            <td v-else>Undefined</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            var patients_table = new DataTable('#patients-table');
+        } catch (error) {
+            // Handle the error here
+            setTimeout(function() {
+                var patients_table = new DataTable('#patients-table');
+            }, 3000)
+        }
+    });
+</script>
+
+{% load static %}
+<script src="{% static 'app/store/patients.js' %}"></script>
+{% endblock %}

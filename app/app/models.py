@@ -21,10 +21,17 @@ class Reports(models.Model):
 
 
 class Patients(models.Model):
+
+    SEX_CHOICES = (
+        (0, "Male"),
+        (1, "Female")
+    )
+
     name = models.TextField(null=False)
     middle_name = models.TextField(default=None, null=True)
     last_name = models.TextField(default=None, null=True)
     birth_date = models.DateField(default=None, null=True)
+    sex = models.IntegerField(choices=SEX_CHOICES, default = None, null = True)
 
 class Medicines(models.Model):
 

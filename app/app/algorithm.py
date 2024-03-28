@@ -1,3 +1,4 @@
+import ast
 from .models import *
 import random
 from sklearn.tree import DecisionTreeClassifier
@@ -17,7 +18,7 @@ from sklearn.metrics import (
     accuracy_score,
 )
 from django.db import connection
-
+import pickle
 
 class TreeAlgorithm:
 
@@ -25,6 +26,67 @@ class TreeAlgorithm:
 
     def __init__(self):
         pass
+
+    def loadModelAndPredictMedicine(self, new_data):
+        # Load the saved model from the .pkl file
+        with open('app/static/app/models/adaboost_model_medicine.pkl', 'rb') as model_file:
+            loaded_model = pickle.load(model_file)
+
+        # Format the new data into the same structure as the training data
+        formatted_data = [
+            [
+                new_data['sex'],
+                new_data['age'],
+                new_data['cp'],
+                new_data['trestbps'],
+                new_data['chol'],
+                new_data['fbs'],
+                new_data['thalach'],
+                new_data['exang'],
+                new_data['oldpeak'],
+                new_data['slope'],
+                new_data['ca'],
+                new_data['thal']
+            ]
+        ]
+
+        # Convert string values to appropriate data types (if necessary)
+        formatted_data = [[ast.literal_eval(val) if isinstance(val, str) else val for val in row] for row in formatted_data]
+
+        # Predict using the loaded model
+        predictions = loaded_model.predict(formatted_data)
+        return predictions
+
+
+    def loadModelAndPredict(self, new_data):
+        # Load the saved model from the .pkl file
+        with open('app/static/app/models/adaboost_model.pkl', 'rb') as model_file:
+            loaded_model = pickle.load(model_file)
+
+        # Format the new data into the same structure as the training data
+        formatted_data = [
+            [
+                new_data['sex'],
+                new_data['age'],
+                new_data['cp'],
+                new_data['trestbps'],
+                new_data['chol'],
+                new_data['fbs'],
+                new_data['thalach'],
+                new_data['exang'],
+                new_data['oldpeak'],
+                new_data['slope'],
+                new_data['ca'],
+                new_data['thal']
+            ]
+        ]
+
+        # Convert string values to appropriate data types (if necessary)
+        formatted_data = [[ast.literal_eval(val) if isinstance(val, str) else val for val in row] for row in formatted_data]
+
+        # Predict using the loaded model
+        predictions = loaded_model.predict(formatted_data)
+        return predictions
 
     def evaluateMetrics(self, y_test, y_pred_test):
         """
@@ -56,7 +118,8 @@ class TreeAlgorithm:
         plt.ylabel("True Answer")
         plt.xlabel("Predicted Answer")
         plt.tight_layout()
-        #plt.show()
+        plt.savefig('app/static/app/images/confusion_matrix.png')  # Save the plot to PNG file
+        plt.close()  # Close the plot to avoid displaying it
 
         accuracy = accuracy_score(y_test, y_pred_test)
         precision = precision_score(y_test, y_pred_test)
@@ -98,8 +161,7 @@ class TreeAlgorithm:
                     item["oldpeak"],
                     item["slope"],
                     item["ca"],
-                    item["thal"],
-                    item["is_healed"],
+                    item["thal"]
                 ]
             )
             correct_answer.append(item["target"])
@@ -146,6 +208,10 @@ class TreeAlgorithm:
         print("Train Accuracy Abnormal/Normal:", train_accuracy)
         print("Test Accuracy Abnormal/Normal:", test_accuracy)
 
+
+        # Save the trained model to a file
+        with open('app/static/app/models/adaboost_model.pkl', 'wb') as model_file:
+            pickle.dump(adaboost, model_file)
 
         TestingDataSet.objects.all().delete()
 
@@ -217,3 +283,39 @@ class TreeAlgorithm:
 
         print("Train Accuracy Medicine:", train_accuracy)
         print("Test Accuracy Medicine:", test_accuracy)
+
+        with open('app/static/app/models/adaboost_model_medicine.pkl', 'wb') as model_file:
+            pickle.dump(adaboost, model_file)
+        # Compute confusion matrix for test data
+        cm = confusion_matrix(y_test, y_pred_test)
+
+        # Plot confusion matrix
+        plt.figure(figsize=(8, 6))
+        plt.imshow(cm, interpolation="nearest", cmap=plt.cm.Blues)
+        plt.title("Confusion Matrix - Medicine Prediction")
+        plt.colorbar()
+        classes = sorted(set(y))  # Get unique classes
+        tick_marks = np.arange(len(classes))
+        plt.xticks(tick_marks, classes, rotation=45)
+        plt.yticks(tick_marks, classes)
+
+        fmt = "d"
+        thresh = cm.max() / 2.0
+
+        for i in range(cm.shape[0]):
+            for j in range(cm.shape[1]):
+                plt.text(
+                    j,
+                    i,
+                    format(cm[i, j], fmt),
+                    horizontalalignment="center",
+                    color="white" if cm[i, j] > thresh else "black",
+                )
+
+        plt.ylabel("True Label")
+        plt.xlabel("Predicted Label")
+        plt.tight_layout()
+
+        # Save confusion matrix as PNG
+        plt.savefig("app/static/app/images/confusion_matrix_medicine.png")
+        plt.close()  # Close the plot to avoid displaying it

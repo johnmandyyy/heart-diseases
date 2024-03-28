@@ -26,6 +26,7 @@ SECRET_KEY = 'cb480bd8-7abf-4e5c-ae8e-1bf07b298900'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+APPEND_SLASH = False
 
 # Application references
 # https://docs.djangoproject.com/en/2.1/ref/settings/#std:setting-INSTALLED_APPS
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'rest_framework_swagger'
 ]
 
 # Middleware framework
