@@ -1,4 +1,5 @@
 import ast
+import asyncio
 from .models import *
 import random
 from sklearn.tree import DecisionTreeClassifier
@@ -20,6 +21,13 @@ from sklearn.metrics import (
 from django.db import connection
 import pickle
 
+import ast
+import matplotlib
+matplotlib.use('Agg')  # Use a non-interactive backend
+import matplotlib.pyplot as plt
+from sklearn.tree import plot_tree
+
+
 class TreeAlgorithm:
 
     DataGen = DataGenerator()
@@ -29,63 +37,104 @@ class TreeAlgorithm:
 
     def loadModelAndPredictMedicine(self, new_data):
         # Load the saved model from the .pkl file
-        with open('app/static/app/models/adaboost_model_medicine.pkl', 'rb') as model_file:
+        with open(
+            "app/static/app/models/adaboost_model_medicine.pkl", "rb"
+        ) as model_file:
             loaded_model = pickle.load(model_file)
 
         # Format the new data into the same structure as the training data
         formatted_data = [
             [
-                new_data['sex'],
-                new_data['age'],
-                new_data['cp'],
-                new_data['trestbps'],
-                new_data['chol'],
-                new_data['fbs'],
-                new_data['thalach'],
-                new_data['exang'],
-                new_data['oldpeak'],
-                new_data['slope'],
-                new_data['ca'],
-                new_data['thal']
+                new_data["sex"],
+                new_data["age"],
+                new_data["cp"],
+                new_data["trestbps"],
+                new_data["chol"],
+                new_data["fbs"],
+                new_data["thalach"],
+                new_data["exang"],
+                new_data["oldpeak"],
+                new_data["slope"],
+                new_data["ca"],
+                new_data["thal"],
             ]
         ]
 
         # Convert string values to appropriate data types (if necessary)
-        formatted_data = [[ast.literal_eval(val) if isinstance(val, str) else val for val in row] for row in formatted_data]
+        formatted_data = [
+            [ast.literal_eval(val) if isinstance(val, str) else val for val in row]
+            for row in formatted_data
+        ]
 
         # Predict using the loaded model
         predictions = loaded_model.predict(formatted_data)
         return predictions
 
+    def visualizePrediction(self, loaded_model, formatted_data, predictions):
+        """A method for visualizing abnormal/normal decision.
+        *** returns numpy array image.
+        """
+        # Check if estimators exist and have at least one tree
+        if not hasattr(loaded_model, 'estimators_') or len(loaded_model.estimators_) == 0:
+            print("Model has no estimators to visualize.")
+            return
+
+        tree = loaded_model.estimators_[0]
+
+        # Create a figure for the tree
+        plt.figure(figsize=(20, 10))
+        plot_tree(tree, filled=True, feature_names=[
+            'sex', 'age', 'cp', 'trestbps', 'chol', 'fbs', 'thalach', 'exang',
+            'oldpeak', 'slope', 'ca', 'thal'], class_names=['Class 0', 'Class 1'])
+
+        # Get the total number of nodes (including internal nodes)
+        n_nodes = tree.tree_.node_count
+
+        # Last leaf node index is always n_nodes - 1
+        leaf_index = n_nodes - 1
+
+        # Highlight the final leaf node
+        plt.scatter(leaf_index, 0, s=500, edgecolor='red', facecolor='none', linewidth=2, label='Final Leaf Node')
+
+        # No need for predicted class as we're focusing on the final leaf
+        plt.title('Decision Tree from AdaBoost Model - Final Leaf Node')
+        plt.legend()
+        plt.show()
 
     def loadModelAndPredict(self, new_data):
         # Load the saved model from the .pkl file
-        with open('app/static/app/models/adaboost_model.pkl', 'rb') as model_file:
+        with open("app/static/app/models/adaboost_model.pkl", "rb") as model_file:
             loaded_model = pickle.load(model_file)
 
         # Format the new data into the same structure as the training data
         formatted_data = [
             [
-                new_data['sex'],
-                new_data['age'],
-                new_data['cp'],
-                new_data['trestbps'],
-                new_data['chol'],
-                new_data['fbs'],
-                new_data['thalach'],
-                new_data['exang'],
-                new_data['oldpeak'],
-                new_data['slope'],
-                new_data['ca'],
-                new_data['thal']
+                new_data["sex"],
+                new_data["age"],
+                new_data["cp"],
+                new_data["trestbps"],
+                new_data["chol"],
+                new_data["fbs"],
+                new_data["thalach"],
+                new_data["exang"],
+                new_data["oldpeak"],
+                new_data["slope"],
+                new_data["ca"],
+                new_data["thal"],
             ]
         ]
 
         # Convert string values to appropriate data types (if necessary)
-        formatted_data = [[ast.literal_eval(val) if isinstance(val, str) else val for val in row] for row in formatted_data]
+        formatted_data = [
+            [ast.literal_eval(val) if isinstance(val, str) else val for val in row]
+            for row in formatted_data
+        ]
 
         # Predict using the loaded model
         predictions = loaded_model.predict(formatted_data)
+        
+        # Visualize prediction using graph.
+        #self.visualizePrediction(loaded_model, formatted_data, predictions)
         return predictions
 
     def evaluateMetrics(self, y_test, y_pred_test):
@@ -118,8 +167,10 @@ class TreeAlgorithm:
         plt.ylabel("True Answer")
         plt.xlabel("Predicted Answer")
         plt.tight_layout()
-        plt.savefig('app/static/app/images/confusion_matrix.png')  # Save the plot to PNG file
-        plt.close()  # Close the plot to avoid displaying it
+        plt.savefig(
+            "app/static/app/images/confusion_matrix.png"
+        )  # Save the plot to PNG file
+        # plt.close()  # Close the plot to avoid displaying it
 
         accuracy = accuracy_score(y_test, y_pred_test)
         precision = precision_score(y_test, y_pred_test)
@@ -161,7 +212,7 @@ class TreeAlgorithm:
                     item["oldpeak"],
                     item["slope"],
                     item["ca"],
-                    item["thal"]
+                    item["thal"],
                 ]
             )
             correct_answer.append(item["target"])
@@ -208,20 +259,37 @@ class TreeAlgorithm:
         print("Train Accuracy Abnormal/Normal:", train_accuracy)
         print("Test Accuracy Abnormal/Normal:", test_accuracy)
 
-
         # Save the trained model to a file
-        with open('app/static/app/models/adaboost_model.pkl', 'wb') as model_file:
+        with open("app/static/app/models/adaboost_model.pkl", "wb") as model_file:
             pickle.dump(adaboost, model_file)
+
+        # Visualize the last tree in the AdaBoost model
+
+        
+        if adaboost.estimators_:
+            
+            plt.figure(figsize=(20, 10))
+            plot_tree(adaboost.estimators_[-1], filled=True, feature_names=[
+                'sex', 'age', 'cp', 'trestbps', 'chol', 'fbs', 'thalach', 
+                'exang', 'oldpeak', 'slope', 'ca', 'thal'], class_names=['Class 0', 'Class 1'])
+            plt.title('Final Decision Tree from AdaBoost Model')
+
+            # Save the figure instead of showing it
+            print("saved")
+            plt.savefig("app/static/app/images/final_decision_tree.png", bbox_inches='tight', dpi=300)
+            plt.close()  # Close the figure to free memory
 
         TestingDataSet.objects.all().delete()
 
         with connection.cursor() as cursor:
-            cursor.execute("DELETE FROM sqlite_sequence WHERE name='app_testingdataset';")
+            cursor.execute(
+                "DELETE FROM sqlite_sequence WHERE name='app_testingdataset';"
+            )
 
         for i in range(len(y_test)):
             TestingDataSet.objects.create(
-                training_id = TrainingDataSet.objects.get(id = X_train_original[i][0]),
-                predicted_values  = y_pred_test[i]
+                training_id=TrainingDataSet.objects.get(id=X_train_original[i][0]),
+                predicted_values=y_pred_test[i],
             )
             print(
                 f"Primary Key: {X_test_original[i][0]} Sample {i+1}: Predicted: {y_pred_test[i]}, Actual: {y_test[i]}"
@@ -284,7 +352,9 @@ class TreeAlgorithm:
         print("Train Accuracy Medicine:", train_accuracy)
         print("Test Accuracy Medicine:", test_accuracy)
 
-        with open('app/static/app/models/adaboost_model_medicine.pkl', 'wb') as model_file:
+        with open(
+            "app/static/app/models/adaboost_model_medicine.pkl", "wb"
+        ) as model_file:
             pickle.dump(adaboost, model_file)
         # Compute confusion matrix for test data
         cm = confusion_matrix(y_test, y_pred_test)

@@ -20,12 +20,8 @@
         </div>
     </div>
 
-    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Add Patients</p>
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-users-medical"></i> Add Patients</p>
     <p class="has-text-grey">Here you can add patient(s)</p>
-
-    <!-- template.html -->
-
-
 
     <div class="card is-rounded has-background-white mt-4 mb-4">
         <div class="card-content">
@@ -65,7 +61,6 @@
                     </div>
                 </div>
 
-
                 <div class="control mb-2">
                     <label class="radio">
                         <input type="radio" value="1" name="sex" v-model="sex" />
@@ -86,13 +81,13 @@
 
                 <div class="field">
                     <div class="control">
-                        <button @click="addPatients()" class="button is-primary is-fullwidth">Add Patient</button>
+                        <button @click="addPatients()" class="button is-primary is-fullwidth">Add
+                            Patient</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
 
     <div class="card is-rounded has-background-white mt-4 mb-4">
         <div class="card-content">
@@ -134,7 +129,6 @@
         </div>
     </div>
 
-
 </div>
 
 <script>
@@ -152,4 +146,5 @@
 
 {% load static %}
 <script src="{% static 'app/store/patients.js' %}"></script>
+
 {% endblock %}

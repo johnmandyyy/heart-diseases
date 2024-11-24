@@ -80,13 +80,6 @@ class TemplateView:
 
     def home(self, request):
         """Renders the home page."""
-
-        # D = DataGenerator()
-
-        #Tree = TreeAlgorithm()
-        # Tree.adaBoost()
-        #Tree.adaBoostMedicine()
-
         assert isinstance(request, HttpRequest)
         if self.helper.userIsLoggedIn(request) == True:
             return render(
@@ -122,6 +115,20 @@ class TemplateView:
                 "app/diagnose.html",
                 {
                     "title": "Diagnose Patients",
+                    "year": datetime.now().year,
+                },
+            )
+        return self.login(request)
+
+    def prescription(self, request, id):
+        """Renders the home page."""
+        assert isinstance(request, HttpRequest)
+        if self.helper.userIsLoggedIn(request) == True:
+            return render(
+                request,
+                "app/prescription.html",
+                {
+                    "title": "Prescription",
                     "year": datetime.now().year,
                 },
             )

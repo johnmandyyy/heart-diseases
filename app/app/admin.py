@@ -18,6 +18,10 @@ class PatientsAdmin(admin.ModelAdmin):
 class MedicinesAdmin(admin.ModelAdmin):
     pass
 
+@admin.register(PatientRecord)
+class PatientRecordAdmin(admin.ModelAdmin):
+    pass
+
 @admin.register(TrainingDataSet)
 class TrainingDataSetAdmin(admin.ModelAdmin):
     list_display = ('id', 'sex', 'age', 'cp', 'trestbps', 'chol', 'fbs', 'thalach', 'exang', 'oldpeak', 'slope', 'ca', 'thal', 'target', 'medicine_id', 'is_healed')

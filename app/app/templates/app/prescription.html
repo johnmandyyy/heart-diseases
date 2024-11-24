@@ -1,0 +1,104 @@
+{% extends "app/layout-prescription.html" %}
+
+{% block content %}
+
+{% load static %}
+
+<style>
+    .custom-cursive {
+    font-family: 'Brush Script MT', cursive; /* You can use any cursive font you like */
+}
+</style>
+
+<div id="dashboard">
+
+    <div class="has-text-centered">
+        <p
+            class="is-size-4 has-text-weight-semibold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0">
+            Template Diagnostic(s) Center
+        </p>
+        <p
+            class="is-size-6 has-text-weight-semibold has-text-grey has-text-weight-light is-family-primary p-0 m-0">
+            Address:
+        </p>
+        <p
+            class="is-size-6 has-text-weight-semibold has-text-grey has-text-weight-light is-family-primary p-0 m-0">
+            Number:
+        </p>
+    </div>
+
+    <div class="content">
+        <hr class="my-4" style="border: 1px solid black;">
+    </div>
+
+    <div class="column mb-0 pb-0">
+        <h1 class="is-size-6 has-text-grey-darke pb-2">
+            Patient Name:
+        </h1>
+
+        <h1 class="is-size-6 has-text-grey-darke pb-2">
+            Address:
+        </h1>
+
+    </div>
+
+    <div class="column pt-2 mt-2">
+        <div class="columns is-mobile">
+            <div class="column is-half">
+                <h1 class="is-size-6 has-text-grey-darke pb-2">
+                    Age:
+                </h1>
+            </div>
+            <div class="column">
+                <h1 class="is-size-6 has-text-grey-darke pb-2">
+                    Sex:
+                </h1>
+            </div>
+            <div class="column">
+                <h1 class="is-size-6 has-text-grey-darke pb-2">
+                    Date:
+                </h1>
+            </div>
+        </div>
+    </div>
+
+    <div class="column">
+        <h1 class="title is-size-1">
+            <i class="fa-solid fa-prescription"></i>
+        </h1>
+    </div>
+
+    <div class="column pt-2 mt-2">
+        <h1
+            class="is-size-4 has-text-grey-dark pb-2 custom-cursive">
+            As suggestion and verdict take Vitamin D : Take with a meal
+            containing fat to enhance absorption. Follow the dosage recommended
+            by your doctor or as indicated on the product label.
+        </h1>
+    </div>
+
+    <div class="column pt-2 mt-2">
+        <div class="columns is-mobile is-align-items-flex-end">
+            <div class="column">
+                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
+                    Physician Signature:
+                </h1>
+                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
+                    Lic No:
+                </h1>
+                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
+                    PTR No:
+                </h1>
+                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
+                    S2 No:
+                </h1>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+{% load static %}
+<script src="{% static 'app/store/dashboard.js' %}"></script>
+
+{% endblock %}

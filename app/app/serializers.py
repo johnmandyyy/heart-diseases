@@ -2,6 +2,12 @@ from rest_framework import serializers
 from .models import *
 
 
+class GenerateDataSetSerializer(serializers.Serializer):
+    is_generate = serializers.BooleanField()
+
+class TrainHeartDataSetSerializer(serializers.Serializer):
+    is_train = serializers.BooleanField()
+
 class ReportsSerializer(serializers.ModelSerializer):
 
     accuracy = serializers.FloatField()

@@ -1,17 +1,19 @@
 {% extends "app/layout.html" %}
-
+{% load static %}
 {% block content %}
 
 <div id="datasets">
-    <div class="modal" id="sample-modal">
+
+
+    <div v-if="isModalActive === true" class="modal is-active" id="sample-modal">
         <div class="modal-background"></div>
         <div class="modal-card">
             <header class="modal-card-head">
-                <p class="modal-card-title">Modal title</p>
+                <p class="modal-card-title">[[ modalContent.title ]]</p>
                 <button class="delete" aria-label="close"></button>
             </header>
             <section class="modal-card-body">
-                <!-- Content ... -->
+                [[ modalContent.message ]]
             </section>
             <footer class="modal-card-foot">
                 <button class="button is-success">Save changes</button>
@@ -20,8 +22,33 @@
         </div>
     </div>
 
+
     <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Datasets</p>
     <p class="has-text-grey">Here you can add datasets, or view.</p>
+
+
+    <div class="card is-rounded has-background-white mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-8">
+                    <p class="subtitle has-text-grey has-text-weight-semibold has-text-centered-mobile mb-1">
+                        Decision Tree Visualization(s)
+                    </p>
+                    <p class="subtitle is-size-6 has-text-grey-light has-text-weight-normal has-text-centered-mobile pb-0 mb-0">
+                        Here is the built Decision Tree from the data.
+                    </p>
+
+
+                </div>
+            </div>
+
+
+            <div class="container has-text-centered">
+                <img src="{% static 'app/images/final_decision_tree.png' %}" alt="Decision Tree" />
+            </div>
+
+        </div>
+    </div>
 
     <div class="card is-rounded has-background-white mb-4">
         <div class="card-content">
@@ -40,9 +67,14 @@
                     </button>
                 </div>
                 <div class="column is-2 mb-0 pb-0">
-                    <button class="button is-secondary is-fullwidth">
-                        Add Dataset(s)
+
+                    <button v-if="is_training_done === true" class="button is-secondary is-fullwidth" @click="trainDataSet()">
+                        Train Dataset
                     </button>
+                    <button v-else class="button is-secondary is-fullwidth" disabled>
+                        <i class="fa-solid fa-spinner fa-spin"> </i>
+                    </button>
+
                 </div>
             </div>
             <div class="table-container">

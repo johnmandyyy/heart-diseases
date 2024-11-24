@@ -16,6 +16,7 @@ new Vue({
             list_of_patients: [],
             patientInfo: '',
             predictingData: {
+                id: null,
                 sex: null,
                 age: null,
                 cp: null,
@@ -33,52 +34,46 @@ new Vue({
     },
     mounted() {
         this.getPatients()
+        this.hideNotification()
     },
     computed() {},
     methods: {
+        hideNotification() {
+            document.getElementById('notificationPanel').style.display = 'none'
+            document.getElementById('innerMessage').innerHTML = ''
+        },
+        showNotification(message) {
+            document.getElementById('notificationPanel').style.display = 'block'
+            document.getElementById('innerMessage').innerHTML = message
+        },
         clearFields() {
             this.name = ''
             this.middle_name = ''
             this.last_name = ''
             this.birth_date = ''
             this.sex = ''
-
             this.finalRemarks.remarks = false
             this.finalRemarks.instruction = ''
 
         },
 
         calculateAge(dateString) {
-            // Convert the date string into a JavaScript Date object
             const birthDate = new Date(dateString)
-
-            // Get the current date
             const currentDate = new Date()
-
-            // Calculate the difference between the current date and the birth date
             let age = currentDate.getFullYear() - birthDate.getFullYear()
-
-            // Check if the current date is before the birthday of the current year
             const monthDiff = currentDate.getMonth() - birthDate.getMonth()
-            if (
-                monthDiff < 0 ||
-                (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())
-            ) {
+            if (monthDiff < 0 || (monthDiff === 0 && currentDate.getDate() < birthDate.getDate())) {
                 age--
             }
             return age
         },
 
         autoFill() {
-            // Get the selected patient object from the list_of_patients
             const selectedPatient = this.list_of_patients.find(
                 (patient) => patient.id === this.patientInfo
             )
 
-            console.log(selectedPatient)
-            // Check if a patient with the selected ID exists
             if (selectedPatient) {
-                // Access the sex and birth_date properties of the selected patient
                 const sex = selectedPatient.sex
                 const birthDate = selectedPatient.birth_date
 
@@ -91,13 +86,15 @@ new Vue({
                 this.middle_name = selectedPatient.middle_name
                 this.last_name = selectedPatient.last_name
 
+                this.predictingData.id = selectedPatient.id
+
+                console.log(this.predictingData.id)
                 console.log(this.name)
                 console.log(this.middle_name)
                 console.log(this.last_name)
-
-                // Print the sex and birth date to the console or do whatever you need with them
                 console.log('Sex:', sex)
                 console.log('Birth Date:', this.age)
+
             } else {
                 console.log('Patient not found')
             }
@@ -117,10 +114,35 @@ new Vue({
                     console.log(error)
                 })
         },
+        checkNullProperties(predictingData) {
+            if (predictingData.sex === null) {
+                return false;
+            } else if (predictingData.age === null) {
+                return false;
+            } else if (predictingData.cp === null) {
+                return false;
+            } else if (predictingData.trestbps === null) {
+                return false;
+            } else if (predictingData.chol === null) {
+                return false;
+            } else if (predictingData.thalach === null) {
+                return false;
+            } else if (predictingData.oldpeak === null) {
+                return false;
+            } else if (predictingData.slope === null) {
+                return false;
+            } else if (predictingData.ca === null) {
+                return false;
+            } else if (predictingData.thal === null) {
+                return false;
+            } else {
+                return true; // No null values found
+            }
+        },
         async getPrediction() {
+
+
             this.clearFields()
-
-
             const csrftoken = this.getCookie('csrftoken')
             axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 
@@ -137,6 +159,7 @@ new Vue({
                 })
 
             this.predictingData = {
+                id: null,
                 sex: null,
                 age: null,
                 cp: null,
@@ -150,11 +173,15 @@ new Vue({
                 ca: null,
                 thal: null,
             }
+
+            this.patientInfo = null
+            this.sex = null
+            this.age = null
+
         },
         async addPatients() {
             const csrftoken = this.getCookie('csrftoken')
             axios.defaults.headers.common['X-CSRFToken'] = csrftoken
-
             await axios
                 .post('/api/add-patients/', {
                     name: this.name,

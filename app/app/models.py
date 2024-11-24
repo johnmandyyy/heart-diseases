@@ -3,6 +3,14 @@ Definition of models.
 """
 
 from django.db import models
+from django.contrib.auth.models import User
+
+
+class Cardiologists(models.Model):
+    physician_account = models.ForeignKey(User, on_delete=models.CASCADE)
+    suffixes = models.CharField(max_length=255, null=True)
+    license_no = models.CharField(max_length=255, null=False)
+    e_signature = models.FileField(null=True, upload_to="signatures")
 
 
 class Reports(models.Model):
@@ -22,16 +30,17 @@ class Reports(models.Model):
 
 class Patients(models.Model):
 
-    SEX_CHOICES = (
-        (0, "Male"),
-        (1, "Female")
-    )
+    SEX_CHOICES = ((0, "Male"), (1, "Female"))
 
     name = models.TextField(null=False)
     middle_name = models.TextField(default=None, null=True)
     last_name = models.TextField(default=None, null=True)
     birth_date = models.DateField(default=None, null=True)
-    sex = models.IntegerField(choices=SEX_CHOICES, default = None, null = True)
+    sex = models.IntegerField(choices=SEX_CHOICES, default=None, null=True)
+
+    def __str__(self):
+        return self.last_name + ", " + self.name + " " + self.middle_name
+
 
 class Medicines(models.Model):
 
@@ -39,7 +48,8 @@ class Medicines(models.Model):
     instruction = models.TextField(null=False)
 
     def __str__(self):
-        return f'{self.medicine_name}'
+        return f"{self.medicine_name}"
+
 
 class TrainingDataSet(models.Model):
     # Chest Pain types
@@ -47,48 +57,37 @@ class TrainingDataSet(models.Model):
         (0, "Typical angina"),
         (1, "Atypical angina"),
         (2, "Non-anginal pain"),
-        (3, "Asymptomatic")
+        (3, "Asymptomatic"),
     )
 
-    SLOPE_CHOICES = (
-        (0, "Upsloping"), 
-        (1, "Flat"), 
-        (2, "Downsloping")
-    )
+    SLOPE_CHOICES = ((0, "Upsloping"), (1, "Flat"), (2, "Downsloping"))
 
-    THAL_CHOICES = (
-        (1, "Normal"), 
-        (2, "Fixed defect"), 
-        (3, "Reversible defect")
-    )
+    THAL_CHOICES = ((1, "Normal"), (2, "Fixed defect"), (3, "Reversible defect"))
 
     CP_CHOICES = (
         (0, "Typical angina"),
         (1, "Atypical angina"),
         (2, "Non-anginal pain"),
-        (3, "Asymptomatic")
+        (3, "Asymptomatic"),
     )
 
-    SEX_CHOICES = (
-        (0, "Male"),
-        (1, "Female")
-    )
-    
-    sex = models.IntegerField(choices = SEX_CHOICES)
-    age = models.IntegerField(default = 1)
+    SEX_CHOICES = ((0, "Male"), (1, "Female"))
+
+    sex = models.IntegerField(choices=SEX_CHOICES)
+    age = models.IntegerField(default=1)
     cp = models.IntegerField(choices=CP_CHOICES)
-    trestbps = models.FloatField(default = 0.00)
-    chol = models.FloatField(default = 0.00)
-    fbs = models.BooleanField(default = False)
-    thalach = models.FloatField(default = 0.00)
-    exang = models.BooleanField(default = False)
-    oldpeak = models.FloatField(default = 0.00)
+    trestbps = models.FloatField(default=0.00)
+    chol = models.FloatField(default=0.00)
+    fbs = models.BooleanField(default=False)
+    thalach = models.FloatField(default=0.00)
+    exang = models.BooleanField(default=False)
+    oldpeak = models.FloatField(default=0.00)
     slope = models.IntegerField(choices=SLOPE_CHOICES)
     ca = models.IntegerField()
     thal = models.IntegerField(choices=THAL_CHOICES)
-    target = models.BooleanField(default = False)
-    medicine_id = models.ForeignKey(Medicines, on_delete=models.CASCADE, null = True)
-    is_healed = models.BooleanField(default = False)
+    target = models.BooleanField(default=False)
+    medicine_id = models.ForeignKey(Medicines, on_delete=models.CASCADE, null=True)
+    is_healed = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
 
@@ -101,7 +100,37 @@ class TrainingDataSet(models.Model):
     def __str__(self):
         return f"Heart Health Data - ID: {self.pk}"
 
+
 class TestingDataSet(models.Model):
     training_id = models.ForeignKey(TrainingDataSet, on_delete=models.CASCADE)
-    predicted_values = models.BooleanField(null = True)
+    predicted_values = models.BooleanField(null=True)
 
+
+class PatientRecord(models.Model):
+    patient_id = models.ForeignKey(Patients, on_delete=models.CASCADE)
+
+    sex = models.IntegerField(choices=TrainingDataSet.SEX_CHOICES)
+    age = models.IntegerField(default=1)
+    cp = models.IntegerField(choices=TrainingDataSet.CP_CHOICES)
+    trestbps = models.FloatField(default=0.00)
+    chol = models.FloatField(default=0.00)
+    fbs = models.BooleanField(default=False)
+    thalach = models.FloatField(default=0.00)
+    exang = models.BooleanField(default=False)
+    oldpeak = models.FloatField(default=0.00)
+    slope = models.IntegerField(choices=TrainingDataSet.SLOPE_CHOICES)
+    ca = models.IntegerField()
+    thal = models.IntegerField(choices=TrainingDataSet.THAL_CHOICES)
+    target = models.BooleanField(default=False)
+    medicine_id = models.ForeignKey(Medicines, on_delete=models.CASCADE, null=True)
+    is_healed = models.BooleanField(default=False)
+    date_recorded = models.DateField(null=True)
+
+    def __str__(self):
+        return (
+            self.patient_id.last_name
+            + ", "
+            + self.patient_id.name
+            + " "
+            + self.patient_id.middle_name
+        )
