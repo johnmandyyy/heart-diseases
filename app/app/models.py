@@ -12,6 +12,15 @@ class Cardiologists(models.Model):
     license_no = models.CharField(max_length=255, null=False)
     e_signature = models.FileField(null=True, upload_to="signatures")
 
+    def __str__(self):
+        return (
+            self.physician_account.first_name
+            + " "
+            + self.physician_account.last_name
+            + " "
+            + self.suffixes
+        )
+
 
 class Reports(models.Model):
 
@@ -134,3 +143,11 @@ class PatientRecord(models.Model):
             + " "
             + self.patient_id.middle_name
         )
+
+
+class Prescription(models.Model):
+    patiend_record_id = models.ForeignKey(PatientRecord, on_delete=models.CASCADE)
+    date_recorded = models.DateField(null=True)
+    notes = models.TextField(null=True)
+    description = models.TextField(null=True)
+    physician = models.ForeignKey(Cardiologists, on_delete=models.CASCADE)

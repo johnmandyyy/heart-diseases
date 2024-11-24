@@ -9,6 +9,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from app.views import TemplateView
 from app.views import Helpers
 from app.api import *
+from django.conf.urls.static import static
+from . import settings
 
 templates = TemplateView()
 helpers = Helpers()
@@ -46,5 +48,8 @@ template_urls = [
     path("admin/", admin.site.urls),
 ]
 
-
-urlpatterns = api_urls + template_urls
+urlpatterns = (
+    api_urls
+    + template_urls
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)
