@@ -1,177 +1,158 @@
 <!DOCTYPE html>
 <html>
-    <head>
 
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>{{ title }} - My Django Application</title>
+<head>
 
-        {% load static %}
-        <link rel="icon" href="{% static 'app/favicon.ico' %}"
-            type="image/x-icon">
-        <link rel="stylesheet"
-            href="{% static 'app/bulma/css/bulma.min.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'app/user-defined/css/customized.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'app/user-defined/css/animations.css' %}">
-        <link rel="stylesheet" href="{% static 'app/fa/css/all.css' %}">
-        <link rel="stylesheet"
-            href="{% static 'app/datatables/datatables.min.css' %}">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }} - My Django Application</title>
 
-        <script src="{% static 'app/jquery/jquery-3.6.0.min.js' %}"></script>
-        <script src="{% static 'app/user-defined/js/modal.js' %}"
-            defer></script>
-        <script src="{% static 'app/datatables/datatables.min.js' %}"
-            async></script>
+    {% load static %}
+    <link rel="icon" href="{% static 'app/favicon.ico' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'app/bulma/css/bulma.min.css' %}">
+    <link rel="stylesheet" href="{% static 'app/user-defined/css/customized.css' %}">
+    <link rel="stylesheet" href="{% static 'app/user-defined/css/animations.css' %}">
+    <link rel="stylesheet" href="{% static 'app/fa/css/all.css' %}">
+    <link rel="stylesheet" href="{% static 'app/datatables/datatables.min.css' %}">
 
-    </head>
+    <script src="{% static 'app/jquery/jquery-3.6.0.min.js' %}"></script>
+    <script src="{% static 'app/user-defined/js/modal.js' %}" defer></script>
+    <script src="{% static 'app/datatables/datatables.min.js' %}" async></script>
 
-    <body>
+    <script src="{% static 'app/scripts/vue.min.js' %}"></script>
+    <script src="{% static 'app/scripts/axios.min.js' %}"></script>
 
-        <div class="modal" id="sample-modal">
-            <div class="modal-background"></div>
-            <div class="modal-card">
-                <header class="modal-card-head">
-                    <p class="modal-card-title has-text-weight-semibold">Create
-                        New Account</p>
-                    <button class="delete" aria-label="close"></button>
-                </header>
-                <section class="modal-card-body">
-                    <form action="{% url 'login_user' %}" method="POST">
-                        {% csrf_token %}
-                        <div class="container">
-                            <div class="columns is-centered">
-                                <div class="column">
-                                    <label
-                                        class="label is-size-6 has-text-grey has-text-weight-semibold">Username</label>
+</head>
+
+<body>
+
+    <div class="modal" id="sample-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+
+            <header class="modal-card-head">
+                <p class="modal-card-title has-text-weight-semibold">Create
+                    New Account</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+
+            <section class="modal-card-body">
+                <div class="container">
+                    <div class="columns is-centered">
+                        <div class="column">
+
+                            <div class="field">
+
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">First Name: *</label>
+                                <input type="text" class="input mb-2" v-model="first_name" placeholder="First Name">
+
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">Last Name: *</label>
+                                <input type="text" class="input mb-2" v-model="last_name" placeholder="Last Name">
+
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">Email Address: *</label>
+                                <input type="text" class="input mb-2" v-model="email_address" placeholder="Email Address">
+
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">Username</label>
+                                <div class="control has-icons-left">
+                                    <input type="text" v-model="username" name="username" placeholder="e.g. jdelacruz" class="input" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-envelope"></i>
+                                    </span>
+                                </div>
+
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">Password</label>
+                                <div class="control has-icons-left">
+                                    <input type="password" v-model="password" name="password" placeholder="********" class="input" required>
+                                    <span class="icon is-small is-left">
+                                        <i class="fa fa-lock"></i>
+                                    </span>
+                                </div>
+
+                            </div>
+
+
+
+                            <div class="field">
+                                <label class="label is-size-6 has-text-grey has-text-weight-semibold">Account Type</label>
+                                <div class="select is-fullwidth">
+                                    <!-- Apply the 'select' class for the Bulma select -->
+                                    <select v-model="is_staff">
+                                        <option value="0">Cardiologist</option>
+                                        <option value="1">Admin / Officer in Charge (OIC)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+            <footer class="modal-card-foot">
+                <button class="button is-primary is-fullwidth" @click="createAccount()">Create
+                    New
+                    Account</button>
+            </footer>
+        </div>
+    </div>
+    <form action="{% url 'login_user' %}" method="POST">
+        {% csrf_token %}
+        <section class="hero">
+            <div class="hero-body">
+                <div class="container">
+                    <div class="columns is-centered">
+
+                        <div class="column is-5-tablet is-4-desktop is-3-widescreen is-capitalized">
+                            <h1 class="is-size-1 mb-4 has-text-centered has-text-weight-bold">Login</h1>
+                            <p class="is-size-6 mb-4 has-text-centered has-text-weight-normal">Heart
+                                Diseases Forecasting System</h1>
+                                <form action class="box">
                                     <div class="field">
+                                        <label for class="label">Username</label>
                                         <div class="control has-icons-left">
-                                            <input type="text" name="username"
-                                                placeholder="e.g. jdelacruz"
-                                                class="input" required>
+                                            <input type="text" name="username" placeholder="e.g. jdelacruz" class="input" required>
                                             <span class="icon is-small is-left">
                                                 <i class="fa fa-envelope"></i>
                                             </span>
                                         </div>
                                     </div>
-
-                                    <div class=field>
-                                        <label
-                                            class="label is-size-6 has-text-grey has-text-weight-semibold">Password</label>
-                                        <div
-                                            class="control has-icons-left">
-                                            <input type="password"
-                                                name="password"
-                                                placeholder="********"
-                                                class="input" required>
-                                            <span
-                                                class="icon is-small is-left">
-                                                <i
-                                                    class="fa fa-lock"></i>
+                                    <div class="field">
+                                        <label for class="label">Password</label>
+                                        <div class="control has-icons-left">
+                                            <input type="password" name="password" placeholder="*******" class="input" required>
+                                            <span class="icon is-small is-left">
+                                                <i class="fa fa-lock"></i>
                                             </span>
                                         </div>
                                     </div>
-
                                     <div class="field">
-                                        <label
-                                            class="label is-size-6 has-text-grey has-text-weight-semibold">Account Type</label>
-                                        <div class="select is-fullwidth">
-                                            <!-- Apply the 'select' class for the Bulma select -->
-                                            <select>
-                                                <!-- Use the 'select' HTML element -->
-                                                <!-- Placeholder option -->
-                                                <option>Officer in Charge (OIC)</option>
-                                                <option>Admin</option>
-                                            </select>
-                                        </div>
+                                        <p class="has-text-info is-underlined has-text-weight-bold js-modal-trigger" data-target="sample-modal">
+                                            Create new account
+                                        </p>
                                     </div>
+                                    <div class="field">
+                                        <button type="submit" class="button is-primary is-fullwidth">
+                                            Login
+                                        </button>
+                                    </div>
+                                </form>
+                        </div>
 
-                                </div>
-                            </div>
-                        </form>
-                    </section>
-                    <footer class="modal-card-foot">
-                        <button class="button is-primary is-fullwidth">Create
-                            New
-                            Account</button>
-                    </footer>
+                    </div>
                 </div>
             </div>
-            <form action="{% url 'login_user' %}" method="POST">
-                {% csrf_token %}
-                <section class="hero">
-                    <div class="hero-body">
-                        <div class="container">
-                            <div class="columns is-centered">
+        </section>
+    </form>
 
-                                <div
-                                    class="column is-5-tablet is-4-desktop is-3-widescreen is-capitalized">
-                                    <h1
-                                        class="is-size-1 mb-4 has-text-centered has-text-weight-bold">Login</h1>
-                                    <p
-                                        class="is-size-6 mb-4 has-text-centered has-text-weight-normal">Heart
-                                        Diseases Forecasting System</h1>
-                                    <form action class="box">
-                                        <div class="field">
-                                            <label for
-                                                class="label">Username</label>
-                                            <div class="control has-icons-left">
-                                                <input type="text"
-                                                    name="username"
-                                                    placeholder="e.g. jdelacruz"
-                                                    class="input" required>
-                                                <span
-                                                    class="icon is-small is-left">
-                                                    <i
-                                                        class="fa fa-envelope"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <label for
-                                                class="label">Password</label>
-                                            <div class="control has-icons-left">
-                                                <input type="password"
-                                                    name="password"
-                                                    placeholder="*******"
-                                                    class="input"
-                                                    required>
-                                                <span
-                                                    class="icon is-small is-left">
-                                                    <i class="fa fa-lock"></i>
-                                                </span>
-                                            </div>
-                                        </div>
-                                        <div class="field">
-                                            <p
-                                                class="has-text-info is-underlined has-text-weight-bold js-modal-trigger"
-                                                data-target="sample-modal">
-                                                Create new account
-                                            </p>
-                                        </div>
-                                        <div class="field">
-                                            <button type="submit"
-                                                class="button is-primary is-fullwidth">
-                                                Login
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
+    {% block scripts %}
 
-                            </div>
-                        </div>
-                    </div>
-                </section>
-            </form>
+    {% endblock %}
 
-            {% block scripts %}
+    <script src="{% static 'app/user-defined/js/navbar.js' %}" defer></script>
+    <script src="{% static 'app/store/login.js' %}"></script>
 
-            {% endblock %}
 
-            <script src="{% static 'app/user-defined/js/navbar.js' %}"
-                defer></script>
+</body>
 
-        </body>
-
-    </html>
+</html>

@@ -1,8 +1,6 @@
 <nav class="navbar backdrop has-background-primary" role="navigation" aria-label="main navigation">
     <div class="navbar-brand">
-        <a class="navbar-item" href="https://bulma.io">
-            <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
-        </a>
+
         <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
             <span aria-hidden="true"></span>
             <span aria-hidden="true"></span>
@@ -18,17 +16,39 @@
                     {{ request.user }}
                 </a>
                 <div class="navbar-dropdown">
-                    <a class="navbar-item">
-                        Profile
+                    <a href="{% url 'home' %}" class="navbar-item{% if request.path == '/' %} is-active{% endif %}">
+                        Dashboard
                     </a>
-                    <a class="navbar-item">
-                        Settings
+
+                    <a href="{% url 'accounts' %}" class="navbar-item{% if request.path == '/accounts/' %} is-active{% endif %}">
+                        Admin<br>
+                        Panel
                     </a>
+
+                    <a href="{% url 'dataset' %}" class="navbar-item{% if request.path == '/dataset/' %} is-active{% endif %}">
+                        Cardiologist's<br>
+                        Panel
+                    </a>
+
+                    <a href="{% url 'add_patients' %}" class="navbar-item{% if request.path == '/add_patients/' %} is-active{% endif %}">
+                        Add<br>Patient(s)
+                    </a>
+
+                    <a href="{% url 'diagnose' %}" class="navbar-item{% if request.path == '/diagnose/' %} is-active{% endif %}">
+                        Diagnose<br>Patient(s)
+                    </a>
+
+                    <a href="{% url 'records' %}" class="navbar-item{% if request.path == '/records/' %} is-active{% endif %}">
+                        Diagnosis<br>Record(s)
+                    </a>
+
                     <hr class="navbar-divider">
+
                     <a href="{% url 'logout' %}" class="navbar-item">
                         Logout
                     </a>
                 </div>
+
             </div>
         </div>
     </div>

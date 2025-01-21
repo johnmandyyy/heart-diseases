@@ -2,6 +2,11 @@ from django.contrib import admin
 from .models import *
 
 
+@admin.register(Prescription)
+class PrescriptionAdmin(admin.ModelAdmin):
+    pass
+
+
 @admin.register(Cardiologists)
 class CardiologistsAdmin(admin.ModelAdmin):
     pass

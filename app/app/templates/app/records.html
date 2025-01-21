@@ -1,0 +1,71 @@
+{% extends "app/layout.html" %}
+
+{% block content %}
+
+<div id="records">
+
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Patient Record(s)</p>
+    <p class="has-text-grey">This only shows the record(s) with
+        prescription.</p>
+
+    <div class="card is-rounded has-background-white mt-4 mb-4">
+        <div class="card-content">
+            <div class="columns">
+                <div class="column is-12">
+
+                    <div class="table-container">
+                        <table class="table is-fullwidth is-striped" id="patients-table">
+                            <thead>
+                                <tr>
+                                    <th>Patient's Name</th>
+                                    <th>Date Recorded / Prescription</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(record, index) in patient_records.data" :key="index">
+                                    <td>
+                                        [[ record.patient ]]
+                                    </td>
+                                    <td>
+                                        <span v-for="diagnose in record.diagnosis">
+                                            <span v-if="diagnose.prescription.has_prescription === true">
+
+                                                <button class="button is-primary mb-2" @click="getPrescription(diagnose)">
+                                                    [[ diagnose.date_recorded ]]
+                                                    / View Prescription
+                                                </button>
+                                                <br>
+                                            </span>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            setTimeout(function() {
+                var patients_table = new DataTable('#patients-table');
+            }, 5000)
+        } catch (error) {
+            // Handle the error here
+            setTimeout(function() {
+                var patients_table = new DataTable('#patients-table');
+            }, 5000)
+        }
+    });
+</script>
+
+{% load static %}
+<script src="{% static 'app/store/records.js' %}"></script>
+
+{% endblock %}

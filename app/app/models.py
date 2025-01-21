@@ -14,11 +14,11 @@ class Cardiologists(models.Model):
 
     def __str__(self):
         return (
-            self.physician_account.first_name
+            str(self.physician_account.first_name)
             + " "
-            + self.physician_account.last_name
+            + str(self.physician_account.last_name)
             + " "
-            + self.suffixes
+            + str(self.suffixes)
         )
 
 
@@ -137,7 +137,10 @@ class PatientRecord(models.Model):
 
     def __str__(self):
         return (
-            self.patient_id.last_name
+            str(self.pk)
+            + " # "
+            + " "
+            + self.patient_id.last_name
             + ", "
             + self.patient_id.name
             + " "
@@ -146,8 +149,18 @@ class PatientRecord(models.Model):
 
 
 class Prescription(models.Model):
+
     patiend_record_id = models.ForeignKey(PatientRecord, on_delete=models.CASCADE)
     date_recorded = models.DateField(null=True)
     notes = models.TextField(null=True)
     description = models.TextField(null=True)
     physician = models.ForeignKey(Cardiologists, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (
+            str(self.pk)
+            + "-"
+            + str(self.patiend_record_id.pk)
+            + "-"
+            + str(self.date_recorded)
+        )

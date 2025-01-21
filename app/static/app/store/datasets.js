@@ -4,7 +4,13 @@ new Vue({
     data() {
         return {
             datasets: [],
-            testing: []
+            testing: [],
+            is_training_done: true,
+            isModalActive: false,
+            modalContent: {
+                title: null,
+                message: null
+            }
         }
     },
     mounted() {
@@ -12,11 +18,37 @@ new Vue({
         this.getTesting()
     },
     methods: {
-        async getDatasets() {
+        async trainDataSet() {
+            const csrftoken = this.getCookie('csrftoken')
+            axios.defaults.headers.common['X-CSRFToken'] = csrftoken
+            this.is_training_done = false
+            await axios
+                .post('/api/train-heart-dataset/', {
+                    is_train: true
+                })
+                .then((response) => {
+                    console.log(response.data)
+                    this.modalContent.title = 'Notification:'
+                    this.modalContent.message = response.data.message
+                    this.isModalActive = true
+
+                    setTimeout(() => {
+                        this.modalContent.title = ''
+                        this.modalContent.message = ''
+                        this.isModalActive = false
+
+                    }, 5000) // 3000 milliseconds = 3 seconds
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            this.is_training_done = true
+        },
+        getDatasets() {
             const csrftoken = this.getCookie('csrftoken')
             axios.defaults.headers.common['X-CSRFToken'] = csrftoken
 
-            await axios
+            axios
                 .get('/api/get-datasets-heart/')
                 .then((response) => {
                     this.datasets = response.data

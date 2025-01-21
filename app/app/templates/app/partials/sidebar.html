@@ -12,30 +12,58 @@
                     <p class="has-text-weight-medium pb-1">Dashboard</p>
                 </a>
             </li>
+
+            {% if request.user.is_superuser == True %}
+            <li class="mb-2 mt-2 pt-1">
+                <a href="{% url 'accounts' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/accounts/' %} has-background-grey-lighter{% endif %}">
+                    <span class="icon is-small ml-4"><i class="fa-solid fa-user mr-4"></i></span>
+                    <p class="has-text-weight-medium pb-1">Admin Panel</p>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if request.user.is_superuser == False %}
             <li class="mb-2 mt-2 pt-1">
                 <a href="{% url 'dataset' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/dataset/' %} has-background-grey-lighter{% endif %}">
                     <span class="icon is-small ml-4"><i class="fa-solid fa-database mr-4"></i></span>
-                    <p class="has-text-weight-medium pb-1">Manage Datasets</p>
+                    <p class="has-text-weight-medium pb-1">Cardiologist's Panel</p>
                 </a>
             </li>
+            {% endif %}
+
             <li class="mb-2 mt-2 pt-1">
                 <a href="{% url 'add_patients' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/add_patients/' %} has-background-grey-lighter{% endif %}">
                     <span class="icon is-small ml-4"><i class="fa-solid fa-plus mr-4"></i></span>
                     <p class="has-text-weight-medium pb-1">Add Patient(s)</p>
                 </a>
             </li>
+
+            {% if request.user.is_superuser == False %}
             <li class="mb-2 mt-2 pt-1">
                 <a href="{% url 'diagnose' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/diagnose/' %} has-background-grey-lighter{% endif %}">
                     <span class="icon is-small ml-4"><i class="fa-solid fa-heart-pulse mr-4"></i></span>
-                    <p class="has-text-weight-medium pb-1">Diagnose Patient(s)</p>
+                    <p class="has-text-weight-medium pb-1">Diagnose
+                        Patient(s)</p>
                 </a>
             </li>
-        </ul>
+            {% endif %}
 
+            <li class="mb-2 mt-2 pt-1">
+                <a href="{% url 'records' %}" class="is-flex is-align-items-center has-text-grey-darker{% if request.path == '/records/' %} has-background-grey-lighter{% endif %}">
+                    <span class="icon is-small ml-4">
+                        <i class="fa-solid fa-file mr-4">
+                        </i></span>
+                    <p class="has-text-weight-medium pb-1">Diagnosis
+                        Record(s)</p>
+                </a>
+            </li>
+
+        </ul>
 
         <ul class="menu-list is-hidden">
             <li class="mb-2 mt-2 pt-1">
-                <a class="is-active has-background-light has-text-grey is-flex is-align-items-center ">Manage Your Team</a>
+                <a class="is-active has-background-light has-text-grey is-flex is-align-items-center ">Manage
+                    Your Team</a>
                 <ul>
                     <li>
                         <a class="has-text-weight-medium has-text-secondary pb-1">Members</a></li>

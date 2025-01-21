@@ -3,9 +3,12 @@ new Vue({
     el: '#patients',
     data() {
         return {
+            is_valid: false,
+            notes: '',
             finalRemarks: {
                 remarks: false,
-                instruction: ''
+                instruction: '',
+                prescription_id: null
             },
             name: null,
             middle_name: null,
@@ -38,6 +41,22 @@ new Vue({
     },
     computed() {},
     methods: {
+        async addPrescription() {
+            const url = '/api/set-prescription/' + String(this.finalRemarks.prescription_id) + '/'
+
+            const data = {
+                "notes": this.notes
+            }
+
+            const result = await axios.patch(url, data)
+            if (result) {
+                console.log(result.data)
+                window.location = '/prescription/' + String(this.finalRemarks.prescription_id) + '/'
+            }
+
+            this.clearFields()
+
+        },
         hideNotification() {
             document.getElementById('notificationPanel').style.display = 'none'
             document.getElementById('innerMessage').innerHTML = ''
@@ -54,6 +73,7 @@ new Vue({
             this.sex = ''
             this.finalRemarks.remarks = false
             this.finalRemarks.instruction = ''
+            this.notes = ''
 
         },
 
@@ -77,7 +97,7 @@ new Vue({
                 const sex = selectedPatient.sex
                 const birthDate = selectedPatient.birth_date
 
-                this.sex = sex === 1 ? 'Male' : sex === 2 ? 'Female' : 'Undefined'
+                this.sex = sex === 0 ? 'Male' : sex === 1 ? 'Female' : 'Undefined'
                 this.predictingData.sex = sex
                 this.age = this.calculateAge(birthDate)
                 this.predictingData.age = this.age
@@ -141,22 +161,25 @@ new Vue({
         },
         async getPrediction() {
 
-
             this.clearFields()
+
             const csrftoken = this.getCookie('csrftoken')
             axios.defaults.headers.common['X-CSRFToken'] = csrftoken
-
-            await axios
-                .post('/api/get-prediction/', this.predictingData)
-                .then((response) => {
-                    console.log(response.data)
-                    this.finalRemarks.remarks = response.data.remarks
-                    this.finalRemarks.instruction = response.data.message
-                    console.log(this.finalRemarks)
-                })
-                .catch((error) => {
-                    console.log(error)
-                })
+            // console.log(this.checkNullProperties(this.predictingData))
+            this.is_valid = this.checkNullProperties(this.predictingData)
+            if (this.is_valid === true) {
+                await axios
+                    .post('/api/get-prediction/', this.predictingData)
+                    .then((response) => {
+                        console.log(response.data)
+                        this.finalRemarks.remarks = response.data.remarks
+                        this.finalRemarks.instruction = response.data.message
+                        this.finalRemarks.prescription_id = response.data.patient_record_id
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
 
             this.predictingData = {
                 id: null,

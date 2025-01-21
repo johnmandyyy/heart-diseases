@@ -6,12 +6,37 @@
 
 <style>
     .custom-cursive {
-    font-family: 'Brush Script MT', cursive; /* You can use any cursive font you like */
+        font-family: 'Brush Script MT', cursive; /* You can use any cursive font you like */
+    }
+
+@media print {
+    body {
+        visibility: hidden;
+    }
+    #prescription, #prescription * {
+        visibility: visible;
+    }
+
+    /* Enable background images */
+    body {
+        -webkit-print-color-adjust: exact; /* Safari */
+        print-color-adjust: exact; /* Chrome, Firefox, Edge */
+    }
+
+    /* Ensure images are printed */
+    img {
+        max-width: 100%;
+        visibility: visible;
+    }
 }
+
+
 </style>
 
-<div id="dashboard">
+<!-- Vue.js instance -->
+<div id="prescription">
 
+    <!-- Printable Content -->
     <div class="has-text-centered">
         <p
             class="is-size-4 has-text-weight-semibold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0">
@@ -33,7 +58,8 @@
 
     <div class="column mb-0 pb-0">
         <h1 class="is-size-6 has-text-grey-darke pb-2">
-            Patient Name:
+            Patient Name: {{ patient_first_name }} {{ patient_middle_name }}
+            {{ patient_last_name }}
         </h1>
 
         <h1 class="is-size-6 has-text-grey-darke pb-2">
@@ -46,17 +72,17 @@
         <div class="columns is-mobile">
             <div class="column is-half">
                 <h1 class="is-size-6 has-text-grey-darke pb-2">
-                    Age:
+                    Age: {{ patient_age }}
                 </h1>
             </div>
             <div class="column">
                 <h1 class="is-size-6 has-text-grey-darke pb-2">
-                    Sex:
+                    Sex: {{ patient_sex }}
                 </h1>
             </div>
             <div class="column">
                 <h1 class="is-size-6 has-text-grey-darke pb-2">
-                    Date:
+                    Date: {{ date_recorded }}
                 </h1>
             </div>
         </div>
@@ -69,36 +95,56 @@
     </div>
 
     <div class="column pt-2 mt-2">
-        <h1
-            class="is-size-4 has-text-grey-dark pb-2 custom-cursive">
-            As suggestion and verdict take Vitamin D : Take with a meal
-            containing fat to enhance absorption. Follow the dosage recommended
-            by your doctor or as indicated on the product label.
+        <h1 class="is-size-4 has-text-grey-dark pb-2 custom-cursive">
+            {{ physician_description }}
+        </h1>
+
+        <h1 class="is-size-6 has-text-grey-dark pb-2">
+            Notes: {{ physician_notes }}
         </h1>
     </div>
 
     <div class="column pt-2 mt-2">
-        <div class="columns is-mobile is-align-items-flex-end">
-            <div class="column">
-                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
-                    Physician Signature:
-                </h1>
-                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
-                    Lic No:
-                </h1>
-                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
-                    PTR No:
-                </h1>
-                <h1 class="is-size-6 has-text-grey-dark pb-2 has-text-right">
-                    S2 No:
-                </h1>
+        <div class="is-flex is-flex-direction-column is-align-items-flex-end">
+            <!-- Image Section -->
+            <div>
+                <img class="image is-size-6" src="{{ physician_signature }}"
+                    alt="Description of image" style="width: 250px">
             </div>
+
+            <!-- Physician Information Section -->
+            <h1 class="is-size-6 has-text-grey-dark mt-0 pt-0 has-text-right">
+                Physician Name: {{ phyisician_name }}
+            </h1>
+
+            <h1 class="is-size-6 has-text-grey-dark mt-0 pt-0 has-text-right">
+                Lic No: {{ physician_license_no }}
+            </h1>
         </div>
     </div>
 
 </div>
 
 {% load static %}
-<script src="{% static 'app/store/dashboard.js' %}"></script>
+
+<script>
+    new Vue({
+        delimiters: ['[[', ']]'],
+        el: '#prescription',
+        data() {
+            return {}
+        },
+        mounted () {
+            this.automatePrint()
+        },
+        methods: {
+            automatePrint() {
+                setTimeout(function() {
+                    window.print();
+                }, 1000);   
+            }
+        },
+    });
+</script>
 
 {% endblock %}

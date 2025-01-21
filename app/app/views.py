@@ -20,6 +20,13 @@ from datetime import datetime
 from .algorithm import TreeAlgorithm
 from .datagen import DataGenerator
 from .models import *
+from app.data_access import GetPrescription
+from django.views.decorators.csrf import csrf_exempt
+
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+
+from datetime import datetime
 
 
 class Helpers:
@@ -27,17 +34,23 @@ class Helpers:
     def __init__(self):
         pass
 
+    @csrf_exempt
     def login_user(self, request):
         user = authenticate(
             request,
             username=request.POST.get("username"),
             password=request.POST.get("password"),
         )
-        if user is not None:
+
+        if user is not None and user.is_active == True:
             login(request, user)
             return redirect(
                 "home"
             )  # Replace 'home' with the name of your home URL pattern.
+
+        return redirect(
+            "home"
+        ) 
 
     def userIsLoggedIn(self, request):
         return request.user.is_authenticated
@@ -50,6 +63,18 @@ class TemplateView:
     def signout(self, request):
         logout(request)
         return redirect("/")
+
+    def accounts(self, request):
+        """Renders the login page."""
+        assert isinstance(request, HttpRequest)
+        return render(
+            request,
+            "app/accounts.html",
+            {
+                "title": "Accounts Page",
+                "year": datetime.now().year,
+            },
+        )
 
     def login(self, request):
         """Renders the login page."""
@@ -124,12 +149,32 @@ class TemplateView:
         """Renders the home page."""
         assert isinstance(request, HttpRequest)
         if self.helper.userIsLoggedIn(request) == True:
+
+            prescription_record = GetPrescription(id).retrieve_prescription_record()
+
+            data = {
+                "title": "Prescription",
+                "year": datetime.now().year,
+            }
+
             return render(
                 request,
                 "app/prescription.html",
-                {
-                    "title": "Prescription",
-                    "year": datetime.now().year,
-                },
+                prescription_record,
             )
+
+        return self.login(request)
+
+    def records(self, request):
+        """Renders the records page."""
+        assert isinstance(request, HttpRequest)
+        if self.helper.userIsLoggedIn(request) == True:
+
+            data = {
+                "title": "Prescription",
+                "year": datetime.now().year,
+            }
+
+            return render(request, "app/records.html", data)
+
         return self.login(request)

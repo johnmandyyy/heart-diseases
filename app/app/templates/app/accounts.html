@@ -1,0 +1,72 @@
+{% extends "app/layout.html" %}
+{% load static %}
+{% block content %}
+
+<div id="accounts">
+
+    <div v-if="isModalActive === true" class="modal is-active" id="sample-modal">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+            <header class="modal-card-head">
+                <p class="modal-card-title">[[ modalContent.title ]]</p>
+                <button class="delete" aria-label="close"></button>
+            </header>
+            <section class="modal-card-body">
+                [[ modalContent.message ]]
+            </section>
+            <footer class="modal-card-foot">
+                <button class="button is-success">Save changes</button>
+                <button class="button">Cancel</button>
+            </footer>
+        </div>
+    </div>
+
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-user"></i> Account(s)</p>
+    <p class="has-text-grey">Here you can approve accounts, or view.</p>
+
+    <div v-if="accounts.data.length > 0">
+        <table class="table is-bordered is-striped is-hoverable is-fullwidth">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Approve Account</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="account in accounts.data">
+                    <td>[[ account.id ]]</td>
+                    <td>[[ account.first_name ]] [[ account.last_name ]]</td>
+                    <td>[[ account.email ]]</td>
+                    <td>
+
+                        <button class="button is-primary" @click="updateAccount(true, account.id)">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+
+                        <button class="button is-danger" @click="updateAccount(false, account.id)">
+                            <i class="fa-solid fa-x"></i>
+                        </button>
+
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+    <div v-else>
+        <h1 class="has-text-grey-dark has-text-centered">
+            <i class="fa-solid fa-x"></i>
+        </h1>
+        <h6 class="has-text-grey has-text-centered">
+            No Pending Account(s)
+            </p>
+    </div>
+
+
+</div>
+
+{% load static %}
+<script src="{% static 'app/store/accounts.js' %}"></script>
+{% endblock %}

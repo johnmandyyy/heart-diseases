@@ -63,11 +63,11 @@
 
                 <div class="control mb-2">
                     <label class="radio">
-                        <input type="radio" value="1" name="sex" v-model="sex" />
+                        <input type="radio" value="0" name="sex" v-model="sex" />
                         Male
                     </label>
                     <label class="radio">
-                        <input type="radio" value="2" name="sex" v-model="sex" />
+                        <input type="radio" value="1" name="sex" v-model="sex" />
                         Female
                     </label>
                 </div>
@@ -118,8 +118,8 @@
                             <td>[[ item.middle_name ]]</td>
                             <td>[[ item.last_name ]]</td>
                             <td>[[ item.birth_date ]]</td>
-                            <td v-if="item.sex === 1">Male</td>
-                            <td v-else-if="item.sex === 2">Female</td>
+                            <td v-if="item.sex === 1">Female</td>
+                            <td v-else-if="item.sex === 0">Male</td>
                             <td v-else>Undefined</td>
                         </tr>
                     </tbody>
@@ -139,7 +139,7 @@
             // Handle the error here
             setTimeout(function() {
                 var patients_table = new DataTable('#patients-table');
-            }, 3000)
+            }, 5000)
         }
     });
 </script>

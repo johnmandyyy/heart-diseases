@@ -23,6 +23,39 @@
     </div>
 
 
+    <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Cardio Info</p>
+    <p class="has-text-grey">Here you can update your info.</p>
+
+
+
+    <div class="control">
+        <label class="label">License No: #</label>
+        <input class="input mb-2" type="text" v-model="cardio_info.license_no" placeholder="License No #">
+        <label class="label">Suffix: #</label>
+        <input class="input mb-2" type="text" v-model="cardio_info.suffixes" placeholder="Suffixes">
+
+        <label class="label">E-Signature: #</label>
+
+        <figure class="">
+            <img :src=" '/media/' + cardio_info.e_signature" style="max-height: 128px;" />
+        </figure>
+
+        <div class="file is-boxed mb-2 is-fullwidth">
+            <label class="file-label">
+                <input class="file-input" type="file" @change="handleFileChange" />
+                <span class="file-cta">
+                    <span class="file-icon">
+                        <i class="fas fa-upload"></i>
+                    </span>
+                    <span class="file-label has-text-centered"> Choose a file… </span>
+                </span>
+            </label>
+        </div>
+
+        <button class="button is-primary mt-4 mb-4 is-fullwidth" @click="updateCardioInfo()">Update Record</button>
+    </div>
+
+
     <p class="is-size-3 has-text-weight-bold has-text-grey-dark has-text-weight-light is-family-primary p-0 m-0"><i class="fa-solid fa-folders"></i> Datasets</p>
     <p class="has-text-grey">Here you can add datasets, or view.</p>
 
@@ -166,14 +199,16 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
-            var dataset_table = new DataTable('#dataset-table');
-            var testing_table = new DataTable('#testing_table');
+            setTimeout(function() {
+                var dataset_table = new DataTable('#dataset-table');
+                var testing_table = new DataTable('#testing_table');
+            }, 5000)
         } catch (error) {
             // Handle the error here
             setTimeout(function() {
                 var dataset_table = new DataTable('#dataset-table');
                 var testing_table = new DataTable('#testing_table');
-            }, 3000)
+            }, 5000)
         }
     });
 </script>
