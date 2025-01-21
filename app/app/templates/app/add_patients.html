@@ -134,7 +134,9 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         try {
-            var patients_table = new DataTable('#patients-table');
+            setTimeout(function() {
+                var patients_table = new DataTable('#patients-table');
+            }, 5000)
         } catch (error) {
             // Handle the error here
             setTimeout(function() {

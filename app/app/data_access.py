@@ -1,6 +1,17 @@
 from django.db import models
 from app.models import *
 from datetime import date
+from app.models import Patients
+
+class GetPatient:
+
+    def __init__(self):
+        pass
+
+    def get_patient_count(self):
+        patient_count = Patients.objects.all()
+        return len(patient_count)
+        
 
 
 class GetPrescription:

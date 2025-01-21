@@ -20,23 +20,29 @@
                         Dashboard
                     </a>
 
+                    {% if request.user.is_superuser == True %}
                     <a href="{% url 'accounts' %}" class="navbar-item{% if request.path == '/accounts/' %} is-active{% endif %}">
                         Admin<br>
                         Panel
                     </a>
+                    {% endif %}
 
+                    {% if request.user.is_superuser == False %}
                     <a href="{% url 'dataset' %}" class="navbar-item{% if request.path == '/dataset/' %} is-active{% endif %}">
                         Cardiologist's<br>
                         Panel
                     </a>
+                    {% endif %}
 
                     <a href="{% url 'add_patients' %}" class="navbar-item{% if request.path == '/add_patients/' %} is-active{% endif %}">
                         Add<br>Patient(s)
                     </a>
 
+                    {% if request.user.is_superuser == False %}
                     <a href="{% url 'diagnose' %}" class="navbar-item{% if request.path == '/diagnose/' %} is-active{% endif %}">
                         Diagnose<br>Patient(s)
                     </a>
+                    {% endif %}
 
                     <a href="{% url 'records' %}" class="navbar-item{% if request.path == '/records/' %} is-active{% endif %}">
                         Diagnosis<br>Record(s)

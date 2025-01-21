@@ -27,7 +27,7 @@ from django.http import HttpResponse
 from django.template.loader import render_to_string
 
 from datetime import datetime
-
+from app.data_access import GetPatient
 
 class Helpers:
 
@@ -107,10 +107,12 @@ class TemplateView:
         """Renders the home page."""
         assert isinstance(request, HttpRequest)
         if self.helper.userIsLoggedIn(request) == True:
+            
             return render(
                 request,
                 "app/dashboard.html",
                 {
+                    "patient_count": GetPatient().get_patient_count(),
                     "title": "Home Page",
                     "year": datetime.now().year,
                 },
